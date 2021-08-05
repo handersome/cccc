@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hp.dao.HealthInfoMapper">
+
+
+
+    <resultMap id="map1" type="cn.hp.model.HealthInfo">
+        <id property="hid" column="hid" ></id>
+        <result property="uname" column="uname"></result>
+        <result property="ipcard" column="ipcard"></result>
+        <result property="temp" column="temp"></result>
+        <result property="condition" column="condition"></result>
+        <result property="ctime" column="ctime"></result>
+        <!-- 表示当前 查询出来内容中有几列 是对应JavaBean中对象属性  -->
+        <association property="admin" javaType="cn.hp.model.Admin" >
+            <id column="aid" property="aid"></id>
+            <result column="aname" property="aname"></result>
+            <result column="apwd" property="apwd"></result>
+            <result column="realname" property="realname"></result>
+        </association>
+    </resultMap>
+
+    <select id="selectAccountByPassword" resultType="int">
+        select count(*) from admin where aname = #{aname } and apwd = #{apwd }
+    </select>
+
+    <select id="selectAll" resultMap="map1">
+        select * from healthinfo left join admin on healthinfo.aid = admin.aid
+    </select>
+      <insert id="add" parameterType="cn.hp.model.HealthInfo1">
+      insert into healthinfo values (null,#{uname} ,#{ipcard} ,#{temp} ,#{condition} ,#{ctime},#{aid})
+      </insert>
+
+
+<delete id="delectByUname" parameterType="cn.hp.model.HealthInfo">
+        delete from healthinfo where uname=#{uname}
+</delete>
+
+<!--    <select id="selcetUname" resultType="cn.hp.model.HealthInfo1">-->
+<!--        select * from  healthinfo where uname=#{uname}-->
+<!--    </select>-->
+
+    <select id="selcetUname" resultType="cn.hp.model.HealthInfo1">
+        select * from  healthinfo where uname=#{uname}
+    </select>
+</mapper>
+
+
